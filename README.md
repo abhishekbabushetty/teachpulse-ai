@@ -2,6 +2,14 @@
 
 A production-grade, real-time classroom intelligence platform. It leverages a live WebRTC streaming architecture, Python-based FastAPI WebSockets, and Hugging Face Vision Transformers (`ViT`) to actively track and analyze the engagement and emotional state of students in real-time.
 
+<p align="center">
+  <img src="images/screenshot-1.png" alt="TeachPulse-AI Dashboard 1" width="48%">
+  <img src="images/screenshot-2.png" alt="TeachPulse-AI Dashboard 2" width="48%">
+  <br>
+  <img src="images/screenshot-3.png" alt="TeachPulse-AI Dashboard 3" width="48%">
+  <img src="images/screenshot-4.png" alt="TeachPulse-AI Dashboard 4" width="48%">
+</p>
+
 ## Architecture
 - **Backend**: Python 3, FastAPI, Uvicorn, WebSockets, SQLAlchemy, PostgreSQL
 - **AI/ML Engine**: OpenCV (Face Detection) + `trpakov/vit-face-expression` (Hugging Face ViT for 7-emotion classification)

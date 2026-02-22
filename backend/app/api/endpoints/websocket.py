@@ -15,36 +15,45 @@ logger = logging.getLogger(__name__)
 async def get_or_create_env(session_id_str: str, user_id_str: str) -> int:
     """Helper to ensure mock database records exist before inserting logs."""
     async with async_session_maker() as db:
-        # Check for Session
-        result = await db.execute(select(Session).where(Session.title == session_id_str))
-        session_obj = result.scalars().first()
-        if not session_obj:
-            # Create dummy teacher
-            teacher = User(name="Teacher", email="teacher@mock.com", role="teacher")
-            db.add(teacher)
-            await db.flush()
-            session_obj = Session(title=session_id_str, teacher_id=teacher.id)
-            db.add(session_obj)
-            await db.flush()
-            
-        # Check for User
-        result = await db.execute(select(User).where(User.name == user_id_str))
-        user_obj = result.scalars().first()
-        if not user_obj:
-            user_obj = User(name=user_id_str, email=f"{user_id_str}@mock.com", role="student")
-            db.add(user_obj)
-            await db.flush()
-            
-        # Check for Participant
-        result = await db.execute(select(Participant).where(Participant.session_id == session_obj.id, Participant.user_id == user_obj.id))
-        participant_obj = result.scalars().first()
-        if not participant_obj:
-            participant_obj = Participant(session_id=session_obj.id, user_id=user_obj.id)
-            db.add(participant_obj)
-            await db.flush()
-            
-        await db.commit()
-        return participant_obj.id
+        try:
+            # Check for Session
+            result = await db.execute(select(Session).where(Session.title == session_id_str))
+            session_obj = result.scalars().first()
+            if not session_obj:
+                # Check for dummy teacher first to avoid UniqueViolation
+                result_teacher = await db.execute(select(User).where(User.email == "teacher@mock.com"))
+                teacher = result_teacher.scalars().first()
+                if not teacher:
+                    teacher = User(name="Teacher", email="teacher@mock.com", role="teacher")
+                    db.add(teacher)
+                    await db.flush()
+                
+                session_obj = Session(title=session_id_str, teacher_id=teacher.id)
+                db.add(session_obj)
+                await db.flush()
+                
+            # Check for User
+            result = await db.execute(select(User).where(User.name == user_id_str))
+            user_obj = result.scalars().first()
+            if not user_obj:
+                user_obj = User(name=user_id_str, email=f"{user_id_str}@mock.com", role="student")
+                db.add(user_obj)
+                await db.flush()
+                
+            # Check for Participant
+            result = await db.execute(select(Participant).where(Participant.session_id == session_obj.id, Participant.user_id == user_obj.id))
+            participant_obj = result.scalars().first()
+            if not participant_obj:
+                participant_obj = Participant(session_id=session_obj.id, user_id=user_obj.id)
+                db.add(participant_obj)
+                await db.flush()
+                
+            await db.commit()
+            return participant_obj.id
+        except Exception as e:
+            logger.error(f"Database error during env creation: {e}")
+            await db.rollback()
+            raise e
 
 @router.websocket("/session/{session_id}/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, session_id: str, user_id: str):

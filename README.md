@@ -56,8 +56,8 @@ cd frontend/student-app
 # 1. Install dependencies
 npm install
 
-# 2. Start the Vite React app on a custom port to avoid conflicts
-npm run dev -- --port 3000
+# 2. Start the Vite React app (natively configured for port 3000)
+npm run dev
 ```
 *Open your browser to: `http://localhost:3000/join`*
 

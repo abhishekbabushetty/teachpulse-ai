@@ -1,0 +1,23 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+asyncpg
+greenlet
+alembic
+pydantic
+pydantic-settings
+redis
+websockets
+celery
+opencv-python-headless
+mediapipe
+# Use deepface or another local model loader depending on HuggingFace caching.
+# For API, we'll start with transformers and torch, OR we do inference endpoints.
+# The user suggested HuggingFace inference endpoint or local Ollama.
+# Let's include what we might need.
+requests
+python-multipart
+transformers
+torch
+torchvision
+Pillow

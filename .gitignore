@@ -1,0 +1,60 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Node / JS
+node_modules/
+dist/
+dist-ssr/
+*.local
+.npm/
+
+# IDEs & OS Files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Database / Models
+*.sqlite3
+postgres_data/
+huggingface/
+.cache/
+
+# Logs
+logs/
+*.log
+
+# Temp files
+tmp/
+temp/
